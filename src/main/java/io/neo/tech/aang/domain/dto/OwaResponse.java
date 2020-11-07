@@ -2,10 +2,9 @@ package io.neo.tech.aang.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -113,6 +112,14 @@ public class OwaResponse {
         return sys;
     }
 
+    public Date getSunrise() {
+        return getSys().getSunrise();
+    }
+
+    public Date getSunset() {
+        return getSys().getSunset();
+    }
+
     public void setSys(Sys sys) {
         this.sys = sys;
     }
@@ -148,6 +155,39 @@ public class OwaResponse {
     public void setCod(Long cod) {
         this.cod = cod;
     }
+
+    /**
+     * Getters of Main
+     * @return
+     */
+    public Double getTemp() {
+        return getMain().getTemp();
+    }
+
+    public Double getFeels_like() {
+        return getMain().getFeels_like();
+    }
+
+    public Double getTemp_min() {
+        return getMain().getTemp_min();
+    }
+
+    public Double getTemp_max() {
+        return getMain().getTemp_max();
+    }
+
+    public Double getPressure() {
+        return getMain().getPressure();
+    }
+
+    public Double getHumidity() {
+        return getMain().getHumidity();
+    }
+
+    /**
+     * Getters of Weather
+     * @return
+     */
 
     @Override
     public String toString() {
@@ -191,6 +231,73 @@ class Main {
     private Double temp_max;
     private Double pressure;
     private Double humidity;
+    //"sea_level":1012,"grnd_level":932
+    private Long sea_level;
+    private Long grnd_level;
+
+    public Long getSea_level() {
+        return sea_level;
+    }
+
+    public void setSea_level(Long sea_level) {
+        this.sea_level = sea_level;
+    }
+
+    public Long getGrnd_level() {
+        return grnd_level;
+    }
+
+    public void setGrnd_level(Long grnd_level) {
+        this.grnd_level = grnd_level;
+    }
+
+    public Double getTemp() {
+        return temp;
+    }
+
+    public void setTemp(Double temp) {
+        this.temp = temp;
+    }
+
+    public Double getFeels_like() {
+        return feels_like;
+    }
+
+    public void setFeels_like(Double feels_like) {
+        this.feels_like = feels_like;
+    }
+
+    public Double getTemp_min() {
+        return temp_min;
+    }
+
+    public void setTemp_min(Double temp_min) {
+        this.temp_min = temp_min;
+    }
+
+    public Double getTemp_max() {
+        return temp_max;
+    }
+
+    public void setTemp_max(Double temp_max) {
+        this.temp_max = temp_max;
+    }
+
+    public Double getPressure() {
+        return pressure;
+    }
+
+    public void setPressure(Double pressure) {
+        this.pressure = pressure;
+    }
+
+    public Double getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(Double humidity) {
+        this.humidity = humidity;
+    }
 }
 
 @Data
@@ -211,6 +318,14 @@ class Sys {
     private String country;
     private Date sunrise;
     private Date sunset;
+
+    public Date getSunrise() {
+        return sunrise;
+    }
+
+    public Date getSunset() {
+        return sunset;
+    }
 
     public void setSunrise(Long sunrise) {
         this.sunrise = new Date(sunrise * 1000);

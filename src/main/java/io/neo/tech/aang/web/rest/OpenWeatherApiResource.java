@@ -2,6 +2,7 @@ package io.neo.tech.aang.web.rest;
 
 import io.neo.tech.aang.domain.dto.OwaRequest;
 import io.neo.tech.aang.domain.dto.OwaResponse;
+import io.neo.tech.aang.domain.dto.ResponseData;
 import io.neo.tech.aang.service.OpenWeatherApiService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -51,15 +52,15 @@ public class OpenWeatherApiResource {
 
         log.info("Getting weather information for request {}", request.toString());
 
-        OwaResponse response = openWeatherApiService.getWeatherInfo(request);
+        ResponseData response = openWeatherApiService.getWeatherInfo(request);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/weather/owa/{image}")
     public ResponseEntity<Map<String, String>> doGetImage(@PathVariable("image") String image,
-                                          HttpServletRequest request,
-                                          HttpServletResponse response) {
+                                                          HttpServletRequest request,
+                                                          HttpServletResponse response) {
 
         UriComponents uri = UriComponentsBuilder.fromHttpUrl(imageUrl)
                 .buildAndExpand(image);

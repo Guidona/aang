@@ -3,19 +3,16 @@ package io.neo.tech.aang.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.neo.tech.aang.domain.dto.OwaRequest;
 import io.neo.tech.aang.domain.dto.OwaResponse;
+import io.neo.tech.aang.domain.dto.ResponseData;
 import io.neo.tech.aang.utils.OkHttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 @Service
@@ -26,8 +23,10 @@ public class OpenWeatherApiService {
     public String url;
     @Value("${owa.api.id}")
     public String appid;
+    @Value("${owa.image.url}")
+    public String imageUrl;
 
-    public OwaResponse getWeatherInfo(OwaRequest request) {
+    public ResponseData getWeatherInfo(OwaRequest request) {
         log.info("Getting weather information for OWA at url {} with id {}", url, appid);
         /**
          * TODO
@@ -58,10 +57,10 @@ public class OpenWeatherApiService {
             ObjectMapper mapper = new ObjectMapper();
             OwaResponse owaResponse = mapper.readValue(response.body().string(), OwaResponse.class);
             log.info(owaResponse.toString());
-            return owaResponse;
+            return buildResponseDataFromOwaResponse(owaResponse);
         } catch (IOException ioe) {
             ioe.printStackTrace();
-            return new OwaResponse();
+            return new ResponseData();
         }
     }
 
@@ -71,5 +70,18 @@ public class OpenWeatherApiService {
         request.getLatitude().ifPresent(lat -> params.put("lat", lat));
         request.getLongitude().ifPresent(lon -> params.put("lan", lon));
         request.getUnit().ifPresent(unit -> params.put("unit", unit));
+    }
+
+    ResponseData buildResponseDataFromOwaResponse(OwaResponse response) {
+        ResponseData responseData = new ResponseData();
+        responseData.setTemperature(response.getTemp());
+        responseData.setFeels_like(response.getFeels_like());
+        responseData.setMin_temperature(response.getTemp_min());
+        responseData.setMax_temperature(response.getTemp_max());
+
+        responseData.setWeatherData(response.getWeather());
+
+        responseData.setSunSetAndSunRise(response.getSunrise(), response.getSunset());
+        return responseData;
     }
 }
